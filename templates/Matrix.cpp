@@ -168,32 +168,39 @@ public:
         return A[i];
     }
 
+    friend ostream& operator << (ostream &out, Matrix &M)
+    {
+        for (int i = 0; i < M.r; ++i) {
+            for (int j = 0; j < M.c; ++j) {
+                out << M[i][j] << " ";
+            }
+            out << '\n';
+        }
+        return out;
+    }
+
 };
+
 
 //Examples : 
 int main()
 {
     Matrix <int> X(5,3,3);
-    X.display();
-    cout << endl;
+    cout << X << endl;
 
     Matrix <int> Y(5,3,1);
 
     Matrix <int> Z = X - Y;
-    Z.display();
-    cout << endl;
+    cout << Z << endl;
 
     Z = X + Y;
-    Z.display();
-    cout << endl;
+    cout << Z << endl;
 
     Matrix <int> I(5);
-    I.display();
-    cout << endl;
+    cout << I << endl;
 
     Matrix <int> I1 = -I;
-    I1.display();
-    cout << endl;
+    cout << I1 << endl;
 
 
     Matrix <int> F(2,2);
@@ -202,11 +209,9 @@ int main()
     F[1][0] = 1;
     F[1][1] = 0;
 
-    F.display();
-    cout << endl;
+    cout << F << endl;
 
     F = F^6;
-    F.display();
-    cout << endl;
+    cout << F << endl;
 
 }

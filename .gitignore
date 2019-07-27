@@ -1,0 +1,6 @@
+#ignore input output files
+templates/inputf.in
+templates/outputf.in
+
+#ignore builds
+templates/build

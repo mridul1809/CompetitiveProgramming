@@ -278,6 +278,35 @@ public:
         delete &C;
     }
 
+    //transpose operation
+    Matrix& transpose()
+    {
+        Matrix <T> &C = *(new Matrix<T>(c,r));
+
+        int i,j;
+        for(i=0;i<r;i++)
+            for(j=0;j<c;j++)
+                C[j][i] = A[i][j];
+
+        return C;
+    }
+
+    //transpose inplace
+    void transposeInplace()
+    {
+        Matrix <T> &C = *(new Matrix<T>(c,r));
+
+        int i,j;
+        for(i=0;i<r;i++)
+            for(j=0;j<c;j++)
+                C[j][i] = A[i][j];
+
+        this->r = C.r;
+        this->c = C.c;
+        this->A = C.A;
+        delete &C;
+    }
+
     //Overload to access/set elements without using dot operator
     //Example :
     // Matrix m(5,3);
@@ -366,5 +395,19 @@ int main()
     //^= operator
     J ^= 6;
     cout << J << endl;
+
+    //example of transpose
+    Matrix <int> L(2,4);
+    L[1][3] = 5;
+    L[1][1] = 9;
+    cout << L << endl;
+
+    //transpose the matrix
+    Matrix <int> &M = L.transpose();
+    cout << M << endl;
+
+    //transpose inplace
+    L.transposeInplace();
+    cout << L << endl;
 
 }

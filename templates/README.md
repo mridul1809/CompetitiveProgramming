@@ -3,7 +3,7 @@
 Class for Matrix manipulation. Several regularly used operators have been overloaded providing important functionalities.
 
 Operators overloaded :
-"+" , "+=" , "*" , "*=" , "-" (unary & binary), "-=" ,"^" (power using binary exponentiation)
+"+" , "+=" , "*" , "*=" , "-" (unary & binary), "-=" ,"^" , "^="(power using binary exponentiation)
 
 Utility Operators :
 overloaded ostream "<<" to print the matrix , "[]" to random access using object directly

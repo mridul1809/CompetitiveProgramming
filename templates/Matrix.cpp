@@ -251,6 +251,33 @@ public:
         return C;
     }
 
+    //overloaded ^= operator to raise square matrix to power
+    //Using binary exponentiation and store the result
+    //in same matrix
+    void operator ^= (long long n)
+    {
+        assert(r == c);
+
+        int i,j;
+        Matrix <T> &C = *(new Matrix<T>(r));
+
+        Matrix <T> &X = *(new Matrix<T>(r,c,0));
+        for(i=0;i<r;i++)
+            for(j=0;j<c;j++)
+                X[i][j] = A[i][j];
+
+        while(n)
+        {
+            if(n&1)
+                C *= (*this);
+
+            (*this) *= (*this);
+            n /= 2;
+        }
+        this->A = C.A;
+        delete &C;
+    }
+
     //Overload to access/set elements without using dot operator
     //Example :
     // Matrix m(5,3);
@@ -332,7 +359,12 @@ int main()
 
     cout << J << endl;
 
-    J = J^6;
+    //^ operator
+    Matrix <int> &K = J^6;
+    cout << K << endl;
+
+    //^= operator
+    J ^= 6;
     cout << J << endl;
 
 }

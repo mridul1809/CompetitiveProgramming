@@ -263,6 +263,9 @@ public:
         return A[i];
     }
 
+    //outstream has been overloaded to quickly print the matrix 
+    //help quicken the debugging process
+    //eg) cout << M <<endl;
     friend ostream& operator << (ostream &out, Matrix &M)
     {
         for (int i = 0; i < M.r; ++i) {
@@ -320,10 +323,12 @@ int main()
 
     //Example of power
     Matrix <int> J(2,2);
-    J[0][0] = 1;
-    J[0][1] = 1;
-    J[1][0] = 1;
-    J[1][1] = 0;
+
+    //overloaded box operator to avoid writing M.A[i][j]
+    J[0][0] = 1;    //same as J.A[0][0]
+    J[0][1] = 1;    //same as J.A[0][1]
+    J[1][0] = 1;    //same as J.A[1][0]
+    J[1][1] = 0;    //same as J.A[1][1]
 
     cout << J << endl;
 

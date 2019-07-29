@@ -2,9 +2,8 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-//Requires these 2 defines
+//set this macro when you need to use modulo in matrix operations
 #define mod 1000000007
-#define ll long long 
 
 
 template <typename T>
@@ -14,6 +13,13 @@ public:
 
     vector < vector <T> > A;
     int r,c;
+
+    //Default Constructor
+    Matrix()
+    {
+        this->r = 0;
+        this->c = 0;
+    }
 
     //Matrix with given dimensions and random values
     Matrix(int r,int c)
@@ -64,7 +70,7 @@ public:
 
     //Overloaded * operator to multiply 2 matrices
     //with conformable dimensions
-    Matrix operator * (Matrix &B)
+    Matrix& operator * (Matrix &B)
     {
         
         assert(c == B.r);
@@ -73,74 +79,162 @@ public:
         int y = c;
         int z = B.c;
 
-        Matrix <T> C(x,z,0);
+        Matrix <T> &C = *(new Matrix<T>(x,z,0));
 
         for(i=0 ; i<x ; i++)
             for(j=0 ; j<z ; j++)
                 for(k=0 ; k<y ; k++)
-                    C[i][j] = (C[i][j] + ( (ll)A[i][k] * (ll)B[k][j] ) )%mod;
+                {
+                    C[i][j] = (C[i][j] + ( (long long )A[i][k] * (long long)B[k][j] ) );
+                    #ifdef mod
+                    C[i][j] %= mod;
+                    #endif
+                }
 
         return C;
+    }
+
+    //Overloaded *= operator to add 2 matrices
+    //of conformable dimensions
+    //and save result in first matrix
+    void operator *= (Matrix &B)
+    {
+        assert(c == B.r);
+        int i,j,k;
+        int x = r;
+        int y = c;
+        int z = B.c;
+
+        Matrix <T> &C = *(new Matrix<T>(x,z,0));
+
+        for(i=0 ; i<x ; i++)
+            for(j=0 ; j<z ; j++)
+                for(k=0 ; k<y ; k++)
+                {
+                    C[i][j] = (C[i][j] + ( (long long)A[i][k] * (long long)B[k][j] ) );
+                    #ifdef mod
+                    C[i][j] %= mod;
+                    #endif
+                }
+        this->r = C.r;
+        this->c = C.c;
+        this->A = C.A;
+        delete &C;
     }
 
     //Overloaded + operator to add 2 matrices
     //with same dimensions
-    Matrix operator + (Matrix &B)
+    Matrix& operator + (Matrix &B)
     {
         assert(r == B.r);
         assert(c == B.c);
 
-        Matrix <T> C(r,c,0);
+        Matrix <T> &C = *(new Matrix<T>(r,c,0));
         int i,j;
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
-                C[i][j] = (A[i][j] + B[i][j])%mod;
+            {
+                C[i][j] = A[i][j] + B[i][j];
+                #ifdef mod
+                C[i][j] %= mod;
+                #endif
+            }
 
         return C;
     }
 
-    //Overload unary - to get negative of a matrix
-    Matrix operator - ()
+    //Overloaded += operator to add 2 matrices
+    //of same dimensions
+    //and save result in first matrix
+    void operator += (Matrix &B)
     {
-        Matrix <T> C(r,c,0);
+        assert(r == B.r);
+        assert(c == B.c);
+
         int i,j;
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
+            {
+                A[i][j] = A[i][j] + B[i][j];
+                #ifdef mod
+                A[i][j] %= mod;
+                #endif
+            }
+    }
+
+    //Overload unary - to get negative of a matrix
+    Matrix& operator - ()
+    {
+        Matrix <T> &C = *(new Matrix<T>(r,c,0));
+        int i,j;
+        for(i=0;i<r;i++)
+            for(j=0;j<c;j++)
+            {
                 C[i][j] = -A[i][j];
+                #ifdef mod
+                C[i][j] %= mod;
+                if(C[i][j] < 0)
+                    C[i][j] += mod;
+                #endif
+            }
 
         return C;
     }
 
     //Overload binary - to subtract a matrix
     //from other with same dimensions
-    Matrix operator - (Matrix &B)
+    Matrix& operator - (Matrix &B)
     {
         assert(r == B.r);
         assert(c == B.c);
 
-        Matrix <T> C(r,c,0);
+        Matrix <T> &C = *(new Matrix<T>(r,c,0));
         int i,j;
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
             {
-                C[i][j] = (A[i][j] - B[i][j])%mod;
+                C[i][j] = A[i][j] - B[i][j];
+                #ifdef mod
+                C[i][j] %= mod;
                 if(C[i][j] < 0)
                     C[i][j] += mod;
+                #endif
             }
 
         return C;
     }
 
+    //Overload binary - to subtract a matrix
+    //from other with same dimensions
+    //and save result in first matrix
+    void operator -= (Matrix &B)
+    {
+        assert(r == B.r);
+        assert(c == B.c);
+
+        int i,j;
+        for(i=0;i<r;i++)
+            for(j=0;j<c;j++)
+            {
+                A[i][j] = A[i][j] - B[i][j];
+                #ifdef mod
+                A[i][j] %= mod;
+                if(A[i][j] < 0)
+                    A[i][j] += mod;
+                #endif
+            }
+    }
+
     //Overload ^ operator to raise a square matrix to a power
     //Using binary matrix exponentiation
-    Matrix operator ^ (ll n)
+    Matrix& operator ^ (long long n)
     {
         assert(r == c);
 
         int i,j;
-        Matrix C(r);
+        Matrix <T> &C = *(new Matrix<T>(r));
 
-        Matrix X(r,c,0);
+        Matrix <T> &X = *(new Matrix<T>(r,c,0));
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
                 X[i][j] = A[i][j];
@@ -148,11 +242,12 @@ public:
         while(n)
         {
             if(n&1)
-                C = C * X;
+                C *= X;
 
-            X = X * X;
+            X *= X;
             n /= 2;
         }
+        delete &X;
         return C;
     }
 
@@ -185,33 +280,54 @@ public:
 //Examples : 
 int main()
 {
-    Matrix <int> X(5,3,3);
-    cout << X << endl;
+    //Example of multiplication
+    //*
+    Matrix <int> A(2,3,1);
+    Matrix <int> B(3,2,2);
+    Matrix <int> &C =  A*B;
+    cout << C << endl;
 
-    Matrix <int> Y(5,3,1);
+    //*=
+    A *= B;
+    cout << A << endl;
 
-    Matrix <int> Z = X - Y;
-    cout << Z << endl;
+    //Example of addition
+    //+
+    Matrix <int> D(2,3,1);
+    Matrix <int> E(2,3,2);
+    Matrix <int> &F = D + E;
+    cout << F << endl;
 
-    Z = X + Y;
-    cout << Z << endl;
+    //+=
+    D += E;
+    cout << D << endl;
 
-    Matrix <int> I(5);
+
+    //Example of subtraction
+    //- binary
+    Matrix <int> G(2,3,1);
+    Matrix <int> H(2,3,2);
+    Matrix <int> &I = G - H;
     cout << I << endl;
 
-    Matrix <int> I1 = -I;
-    cout << I1 << endl;
+    //- unary
+    I = -G;
+    cout << I << endl;
 
+    //-=
+    G -= H;
+    cout << G << endl;
 
-    Matrix <int> F(2,2);
-    F[0][0] = 1;
-    F[0][1] = 1;
-    F[1][0] = 1;
-    F[1][1] = 0;
+    //Example of power
+    Matrix <int> J(2,2);
+    J[0][0] = 1;
+    J[0][1] = 1;
+    J[1][0] = 1;
+    J[1][1] = 0;
 
-    cout << F << endl;
+    cout << J << endl;
 
-    F = F^6;
-    cout << F << endl;
+    J = J^6;
+    cout << J << endl;
 
 }

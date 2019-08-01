@@ -70,7 +70,7 @@ public:
 
     //Overloaded * operator to multiply 2 matrices
     //with conformable dimensions
-    Matrix& operator * (Matrix &B)
+    Matrix operator * (Matrix &B)
     {
         
         assert(c == B.r);
@@ -79,7 +79,7 @@ public:
         int y = c;
         int z = B.c;
 
-        Matrix <T> &C = *(new Matrix<T>(x,z,0));
+        Matrix <T> C(x,z,0);
 
         for(i=0 ; i<x ; i++)
             for(j=0 ; j<z ; j++)
@@ -105,7 +105,7 @@ public:
         int y = c;
         int z = B.c;
 
-        Matrix <T> &C = *(new Matrix<T>(x,z,0));
+        Matrix <T> C(x,z,0);
 
         for(i=0 ; i<x ; i++)
             for(j=0 ; j<z ; j++)
@@ -119,17 +119,16 @@ public:
         this->r = C.r;
         this->c = C.c;
         this->A = C.A;
-        delete &C;
     }
 
     //Overloaded + operator to add 2 matrices
     //with same dimensions
-    Matrix& operator + (Matrix &B)
+    Matrix operator + (Matrix &B)
     {
         assert(r == B.r);
         assert(c == B.c);
 
-        Matrix <T> &C = *(new Matrix<T>(r,c,0));
+        Matrix <T> C(r,c,0);
         int i,j;
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
@@ -163,9 +162,9 @@ public:
     }
 
     //Overload unary - to get negative of a matrix
-    Matrix& operator - ()
+    Matrix operator - ()
     {
-        Matrix <T> &C = *(new Matrix<T>(r,c,0));
+        Matrix <T> C(r,c,0);
         int i,j;
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
@@ -183,12 +182,12 @@ public:
 
     //Overload binary - to subtract a matrix
     //from other with same dimensions
-    Matrix& operator - (Matrix &B)
+    Matrix operator - (Matrix &B)
     {
         assert(r == B.r);
         assert(c == B.c);
 
-        Matrix <T> &C = *(new Matrix<T>(r,c,0));
+        Matrix <T> C(r,c,0);
         int i,j;
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
@@ -227,14 +226,14 @@ public:
 
     //Overload ^ operator to raise a square matrix to a power
     //Using binary matrix exponentiation
-    Matrix& operator ^ (long long n)
+    Matrix operator ^ (long long n)
     {
         assert(r == c);
 
         int i,j;
-        Matrix <T> &C = *(new Matrix<T>(r));
+        Matrix <T> C(r);
 
-        Matrix <T> &X = *(new Matrix<T>(r,c,0));
+        Matrix <T> X(r,c,0);
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
                 X[i][j] = A[i][j];
@@ -247,7 +246,6 @@ public:
             X *= X;
             n /= 2;
         }
-        delete &X;
         return C;
     }
 
@@ -259,9 +257,9 @@ public:
         assert(r == c);
 
         int i,j;
-        Matrix <T> &C = *(new Matrix<T>(r));
+        Matrix <T> C(r) ;
 
-        Matrix <T> &X = *(new Matrix<T>(r,c,0));
+        Matrix <T> X(r,c,0);
         for(i=0;i<r;i++)
             for(j=0;j<c;j++)
                 X[i][j] = A[i][j];
@@ -275,13 +273,12 @@ public:
             n /= 2;
         }
         this->A = C.A;
-        delete &C;
     }
 
     //transpose operation
-    Matrix& transpose()
+    Matrix transpose()
     {
-        Matrix <T> &C = *(new Matrix<T>(c,r));
+        Matrix <T> C(c,r);
 
         int i,j;
         for(i=0;i<r;i++)
@@ -294,7 +291,7 @@ public:
     //transpose inplace
     void transposeInplace()
     {
-        Matrix <T> &C = *(new Matrix<T>(c,r));
+        Matrix <T> C(c,r);
 
         int i,j;
         for(i=0;i<r;i++)
@@ -304,7 +301,6 @@ public:
         this->r = C.r;
         this->c = C.c;
         this->A = C.A;
-        delete &C;
     }
 
     //Overload to access/set elements without using dot operator
@@ -343,7 +339,7 @@ int main()
     //*
     Matrix <int> A(2,3,1);
     Matrix <int> B(3,2,2);
-    Matrix <int> &C =  A*B;
+    Matrix <int> C =  A*B;
     cout << C << endl;
 
     //*=
@@ -354,7 +350,7 @@ int main()
     //+
     Matrix <int> D(2,3,1);
     Matrix <int> E(2,3,2);
-    Matrix <int> &F = D + E;
+    Matrix <int> F = D + E;
     cout << F << endl;
 
     //+=
@@ -366,7 +362,7 @@ int main()
     //- binary
     Matrix <int> G(2,3,1);
     Matrix <int> H(2,3,2);
-    Matrix <int> &I = G - H;
+    Matrix <int> I = G - H;
     cout << I << endl;
 
     //- unary
@@ -389,7 +385,7 @@ int main()
     cout << J << endl;
 
     //^ operator
-    Matrix <int> &K = J^6;
+    Matrix <int> K = J^6;
     cout << K << endl;
 
     //^= operator
@@ -403,7 +399,7 @@ int main()
     cout << L << endl;
 
     //transpose the matrix
-    Matrix <int> &M = L.transpose();
+    Matrix <int> M = L.transpose();
     cout << M << endl;
 
     //transpose inplace

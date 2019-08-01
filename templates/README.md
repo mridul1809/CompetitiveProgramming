@@ -23,3 +23,5 @@ Instead of storing pointer to that block , index of that node is stored in next[
 Functions added : Insert string , check if string exists as a prefix , check is string exists as it is!
 
 Examples on how to use the functions have been provided along with the code. 
+
+Support for creating persistence in trie has also been added!

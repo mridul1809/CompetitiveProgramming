@@ -30,7 +30,7 @@ public:
     }
 
     //Matrix with given value and dimensions
-    Matrix(int r,int c,T val)
+    Matrix(int r,int c,const T &val)
     {
 
         this->r = r;
@@ -70,7 +70,7 @@ public:
 
     //Overloaded * operator to multiply 2 matrices
     //with conformable dimensions
-    Matrix operator * (Matrix &B)
+    Matrix operator * (const Matrix<T> &B)
     {
         
         assert(c == B.r);
@@ -97,7 +97,7 @@ public:
     //Overloaded *= operator to add 2 matrices
     //of conformable dimensions
     //and save result in first matrix
-    void operator *= (Matrix &B)
+    void operator *= (const Matrix<T> &B)
     {
         assert(c == B.r);
         int i,j,k;
@@ -123,7 +123,7 @@ public:
 
     //Overloaded + operator to add 2 matrices
     //with same dimensions
-    Matrix operator + (Matrix &B)
+    Matrix operator + (const Matrix<T> &B)
     {
         assert(r == B.r);
         assert(c == B.c);
@@ -145,7 +145,7 @@ public:
     //Overloaded += operator to add 2 matrices
     //of same dimensions
     //and save result in first matrix
-    void operator += (Matrix &B)
+    void operator += (const Matrix<T> &B)
     {
         assert(r == B.r);
         assert(c == B.c);
@@ -182,7 +182,7 @@ public:
 
     //Overload binary - to subtract a matrix
     //from other with same dimensions
-    Matrix operator - (Matrix &B)
+    Matrix operator - (const Matrix<T> &B)
     {
         assert(r == B.r);
         assert(c == B.c);
@@ -206,7 +206,7 @@ public:
     //Overload binary - to subtract a matrix
     //from other with same dimensions
     //and save result in first matrix
-    void operator -= (Matrix &B)
+    void operator -= (const Matrix<T> &B)
     {
         assert(r == B.r);
         assert(c == B.c);
@@ -308,7 +308,16 @@ public:
     // Matrix m(5,3);
     // m.A[i][j] is valid to access
     // m[i][j] is valid as well
-    vector<T>& operator [](int i)
+    vector<T>& operator [] (int i)
+    {
+        assert(i < r);
+        assert(i >= 0);
+        return A[i];
+    }
+
+    //Overload to access/set elements without using dot operator
+    //for accessing from cosnt objects
+    const vector<T>& operator [] (int i) const
     {
         assert(i < r);
         assert(i >= 0);
@@ -318,7 +327,7 @@ public:
     //outstream has been overloaded to quickly print the matrix 
     //help quicken the debugging process
     //eg) cout << M <<endl;
-    friend ostream& operator << (ostream &out, Matrix &M)
+    friend ostream& operator << (ostream &out,const Matrix<T> &M)
     {
         for (int i = 0; i < M.r; ++i) {
             for (int j = 0; j < M.c; ++j) {

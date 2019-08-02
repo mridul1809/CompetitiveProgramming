@@ -13,6 +13,9 @@ public:
 	//like '0' for '0','1','2'... as possible characters in string 
     const static char baseChar = 'a';
 
+    //freq is how many times this prefix occurs
+    int freq;
+
 	struct TrieNode
 	{
 		int next[N];
@@ -24,6 +27,7 @@ public:
 			for(int i=0;i<N;i++)
 				next[i] = -1;
 			isEnd = false;
+			// count = 0;
 		}
 	};
 
@@ -41,8 +45,10 @@ public:
 	void insert(const string &s)
     {
         int p = 0;
+        tree[p].freq++;
         for(int i=0;i<s.size();i++)
         {
+        	// tree[]
             if(tree[p].next[s[i]-baseChar] == -1)
             {
                 tree.push_back(TrieNode());
@@ -50,6 +56,7 @@ public:
             }
 
             p = tree[p].next[s[i]-baseChar];
+            tree[p].freq++;
         }
         tree[p].isEnd = true;
     }
@@ -101,11 +108,16 @@ public:
     		{
     			tree.push_back(TrieNode());
     			tree[now].next[s[i]-baseChar] = tree.size() - 1;
+    			tree[now].freq++;
     			now = tree[now].next[s[i]-baseChar];
     			continue;
     		}
     		for(j=0;j<N;j++)
     			tree[now].next[j] = tree[old].next[j];
+    		tree[now].freq = tree[old].freq;
+    		tree[now].isEnd = tree[old].isEnd;
+
+    		tree[now].freq++;
     		
     		tree.push_back(TrieNode());
     		tree[now].next[s[i]-baseChar] = tree.size()-1;
@@ -114,6 +126,7 @@ public:
     		now = tree[now].next[s[i]-baseChar];
     	}
 
+    	tree[now].freq++;
     	tree[now].isEnd = true;
 
     	return newHead;

@@ -13,21 +13,20 @@ public:
 	//like '0' for '0','1','2'... as possible characters in string 
     const static char baseChar = 'a';
 
-    //freq is how many times this prefix occurs
-    int freq;
-
 	struct TrieNode
 	{
 		int next[N];
 		//if isEnd is set to true , a string ended here
 		bool isEnd;
+		//freq is how many times this prefix occurs
+    	int freq;
 
 		TrieNode()
 		{
 			for(int i=0;i<N;i++)
 				next[i] = -1;
 			isEnd = false;
-			// count = 0;
+			freq = 0;
 		}
 	};
 
